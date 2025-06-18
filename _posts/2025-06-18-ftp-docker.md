@@ -132,7 +132,7 @@ cat /etc/vsftpd.conf | grep -v "#" # We exclude "#" to skip comments
 | `rsa_private_key_file` | /etc/ssl/private/ssl-cert-snakeoil.key | Specifies the path to the RSA private key file corresponding to the certificate. Used when `ssl_enable` is `YES`.                                                                                                                                            |
 | `ssl_enable`           | NO                                     | Enables/Disables SSL/TLS encryption. **For any production or sensitive use, this should be `YES` and proper certificates should be used.** If `NO`, connections are unencrypted (plain FTP).                                                                 |
 
-These are default settings that comes with `vsftpd` installation. Of course, there are other optional settings that can be found [here](http://vsftpd.beasts.org/vsftpd_conf.html). Since there are a lot of them and it would take a long time to explain all of them, we are gonna tackle the ones that would suppose a critical vulnerability in the real world:
+These are default settings that comes with `vsftpd` installation. Of course, there are other optional settings that can be found [here](https://vsftpd.beasts.org/vsftpd_conf.html). Since there are a lot of them and it would take a long time to explain all of them, we are gonna tackle the ones that would suppose a critical vulnerability in the real world:
 
 | **Setting**               | Value              | **Description**                                                                                                 |
 | ------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------- |
