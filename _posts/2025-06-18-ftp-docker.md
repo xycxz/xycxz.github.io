@@ -60,11 +60,11 @@ Status: Downloaded newer image for ubuntu:latest
 docker.io/library/ubuntu:latest # Here we have a clue of the site our image is getting downloaded from
 ```
 
-![[Pasted image 20250613114823.png]]
+![wireshark-dns.png](wireshark-dns.png)
 
 I applied the `dns` filter in order to demonstrate the moment my computer asked for the IP address of the Docker's servers. Because communication with the servers uses `TLS` encryption for security reasons, i'll apply the `tls` filter to show the handshakes being made to external servers:
 
-![[Pasted image 20250613115530.png]]
+![wireshark-tls.png](wireshark-tls.png)
 
 This is the final proof that shows the place of where Docker is getting the images when it does not find them locally. This is a trivial and short demonstration i wanted to put here just to insist on the wise advice of always `try to understand what you are doing and why it is working`. This is the key to master any area of the cybersecurity landscape.
 
@@ -81,7 +81,7 @@ ubuntu        latest    9d45648b4030   2 weeks ago    101MB
 
 In order to be able to configure our container and install everything what we need in a more comfortable way (meaning on a shell inside the container), we have to run it in `interactive` mode and allocate a `pseudo-TTY`. We will need the following flags for that:
 
-![[Pasted image 20250613121200.png]]
+![interactive-shell.png](interactive-shell.png)
 
 I'll also assign a custom name to it to keep ourselves organised:
 
@@ -89,7 +89,7 @@ I'll also assign a custom name to it to keep ourselves organised:
 docker run -it --name ftp-lab ubuntu bash 
 ```
 
-![[Screenshot 2025-06-13 at 12.30.43.png]]
+![docker-flags.png](docker-flags.png)
 
 We find ourselves inside the container! It is very important to remark that containers are not prepared to work in the same way as an OS would work normally. We can prove that when trying to run commands like `ip` or `ifconfig`. 
 
