@@ -5,7 +5,7 @@ image:
   path: ftp_docker.png
   alt: Apache2/Docker preview
 layout: post
-media_subpath: /assets/posts/2025-06-25-apache2-docker
+media_subpath: /assets/posts/2025-06-18-ftp-docker
 tags: [ "Apache", "PHP", "Docker", "Linux", "DevOps", "Sysadmin", "Containers" ]
 ---
 
