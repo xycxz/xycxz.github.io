@@ -2,14 +2,14 @@
 title: Web Server - Docker
 categories: [ "Docker", "Apache2", "PHP" ]
 image:
-  path: apache2_docker.png
+  path: ftp_docker.png
   alt: Apache2/Docker preview
 layout: post
 media_subpath: /assets/posts/2025-06-25-apache2-docker
 tags: [ "Apache", "PHP", "Docker", "Linux", "DevOps", "Sysadmin", "Containers" ]
 ---
 
-
+<!-->
 ## Objective
 
 The goal here is to configure a web server (`Apache` in this case) inside a Docker container. This will have a login form which requires some user credentials which will be linked to a MySQL database. However, this integration will be done in a different post.
@@ -43,7 +43,7 @@ However, how can we know where our webpage is being hosted? Web servers usually 
 docker inspect <container name>
 ```
 
-![docker_inspect_output.png](docker_inspect_output.png)
+[docker_inspect_output.png](docker_inspect_output.png)
 
 Now that we know the IP address and port where the web server is running, it is time to navigate to it and see what it will display. Apache by default will display a page that says `It works!` in case we installed everything correctly.
 
