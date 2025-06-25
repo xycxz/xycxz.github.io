@@ -2,14 +2,14 @@
 title: Web Server - Docker
 categories: [ "Docker", "Apache2", "PHP" ]
 image:
-  path: ftp_docker.png
+  path: apache2_docker.png
   alt: Apache2/Docker preview
 layout: post
-media_subpath: /assets/posts/2025-06-18-ftp-docker
+media_subpath: /assets/posts/2025-06-25-apache2-docker
 tags: [ "Apache", "PHP", "Docker", "Linux", "DevOps", "Sysadmin", "Containers" ]
 ---
 
-<!-->
+
 ## Objective
 
 The goal here is to configure a web server (`Apache` in this case) inside a Docker container. This will have a login form which requires some user credentials which will be linked to a MySQL database. However, this integration will be done in a different post.
