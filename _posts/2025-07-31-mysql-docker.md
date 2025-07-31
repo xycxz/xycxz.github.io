@@ -5,7 +5,7 @@ image:
   path: apache2_docker.png
   alt: MySQL/Docker preview
 layout: post
-media_subpath: /assets/posts/2025-07-31-mysql-docker
+media_subpath: /assets/posts/2025-06-25-apache2-docker
 tags: [ "MySQL", "PHP", "Docker", "Linux", "DevOps", "Sysadmin", "Containers" ]
 ---
 
