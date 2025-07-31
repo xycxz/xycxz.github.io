@@ -11,22 +11,22 @@ tags: [ "MySQL", "PHP", "Docker", "Linux", "DevOps", "Sysadmin", "Containers" ]
 
 ## Objective
 
-Today I will be explaining how to configure a MySQL database and how to also connect it to our web application. I will also introduce a code flaw on purpose to show how lack of input validation and sanitization can lead to unwanted consequences (SQL injection).
+Today I will be explaining how to configure a MySQL database and how to connect it to our [web](https://xycxz.github.io/apache2-docker/) application. I will also introduce a code flaw on purpose to show how lack of input validation and sanitization can lead to unwanted consequences (SQL injection).
 
-To make this even easier to visualise, I will create a separate container that will be running `phpMyAdmin`, so we can have a GUI for the database. This is the last post I am doing before starting implementing `Docker Compose` and `AWS`.
+To make this even easier to visualise, I will create a separate container that will be running `phpMyAdmin`, so we can have a GUI for the database. This is the last post I am doing before starting implementing `Docker Compose` and `AWS` on this project.
 ## First Steps
 
-Like usual, we will start downloading the official image of the services we want to configure. In my case I will be using version `9.4` for [MySQL](https://hub.docker.com/_/mysql) and version `5.2-apache` for [phpMyAdmin](https://hub.docker.com/_/phpmyadmin). To make sure that our containers can communicate to each other using DNS resolution and in a separate network, I will create a custom bridge network using the following command:
+Like usual, we will start downloading the image of the services we want to configure. In my case I will be using version `9.4` for [MySQL](https://hub.docker.com/_/mysql) and version `5.2-apache` for [phpMyAdmin](https://hub.docker.com/_/phpmyadmin). To make sure that our containers can communicate to each other using DNS resolution and in a separate network (not the deafult bridge network created by Docker), I will create a custom bridge network using the following command:
 
 ```bash
 docker network create <NETWORK-NAME>
 ```
 
-**Note**: All this process will be simplified when we implement Docker Compose on this project. Nonetheless, understanding how networking works between containers is a crucial fundamental skill, which is why we are doing it manually first.
+**Note**: All this process will be simplified when we implement `Docker Compose`. Nonetheless, understanding how networking works between containers is a crucial fundamental skill, which is why we are doing it manually first.
 
 ![network_output.png](network_output.png)
 
-Now we can launch both containers and give them the names that we want. Because they will share the same custom network that enables DNS resolution, it will be easy for us to locate the correct containers by their names.
+Now we can launch both containers and give them the names that we want. Because they will share the same custom network that enables DNS resolution, it will be easy for us to locate the containers by their names.
 ## Launching and Connecting the Services
 
 For now, we won't be diving into the configuration files but rather making sure both our services are working as expected so then we can configure them as we want. For this, we will start by running both containers as we usually do:
@@ -54,7 +54,7 @@ Before configuring our database, I will be creating an user responsible for mana
 
 This will create a new database that the created user will have full privileges on. We also need to make sure that `Host name` is set to `Any host`, since this allows the application container to connect from the Docker network. In production, it's safer to restrict access to specific IPs or use `localhost` where possible.
 
-Let's login with this user now and create the tables needed in the database. I will be creating a `users` table that will consist of two columns: one holding the username, and the other one its password. For that, we will select the corresponding database and create the table:
+Let's login with this user now and create the table needed in the database. I will be creating a `users` table that will consist of two columns: one holding the username, and the other one its password. For that, we will select the corresponding database and create the table:
 
 ![creating_db_1.png](creating_db_1.png)
 
@@ -74,9 +74,10 @@ Once we passed in the data, we can click on `Go`. I will be adding extra users t
 
 ![final_db.png](final_db.png)
 
-**Note**: You can configure the database to not allow duplicates by adding a column with the name of `id` and the type of `INT` (check the `A I` box as well to generate unique IDs). Make sure to also give this column an `index` and select the value of `PRIMARY`. Don't forget to empty your table before doing this, otherwise it will throw an error! Adding this will give us more control over the database.
+**Note**: You can configure the database to not allow duplicates by adding a column with the name of `id` and the type of `INT` (check the `A I` box as well to generate unique IDs). Make sure to also give this column an `index` and select the value of `PRIMARY` (you can do this during the table creation process as well). Don't forget to empty your table before doing this, otherwise it will throw an error! Adding this will give us more control over the database.
 
 With our database ready, what we need to do now is connect it to our web application that is running on the Apache container. For that, I will write the following code:
+##### db_connect.php
 
 ```php
 <?php 
@@ -92,6 +93,7 @@ $pdo = new PDO('mysql:host=<DB_CONTAINER>;dbname=<DB_NAME>', '<USER>', '<PASSWOR
 **Note**: In the connection string `mysql:host=dbxy`, we use the container's name, `dbxy`, as the hostname. This works because both containers are on the same `custom Docker network`, which provides a built-in DNS service that resolves container names to their internal IP addresses. The user and password are the ones used to connect to this specific database, so we have to make sure they match what we previously did when creating the database and the user that manages it. Additionally, we can use the `var_dump($pdo)` function to check connectivity. If it works, we should get a message like this: `object(PDO)#1 (0) {}`.
 
 Now we can implement the backend logic and update the `index.php` file shown in my previous post. The final code will look like the following:
+##### index.php
 
 ```php
 <?php
@@ -163,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 With the database ready and connected to our web application, we just need to make sure to create our custom image using `Dockerfile`. 
 
-For that, first we need to export our database using the `phpMyAdmin` interface so then we can use it when the image gets built. To achieve this, select  our database, click on `Export`, and choose `SQL` format. Then we can click on `Export`:
+For that, first we need to export our database using the `phpMyAdmin` interface so then we can use it when the image gets built. To achieve this, select  the database, click on `Export`, and choose `SQL` format. Then we can click on `Export`:
 
 ![exporting_db.png](exporting_db.png)
 
@@ -200,9 +202,36 @@ COPY <SQL-FILE> /docker-entrypoint-initdb.d/
 ```
 
 **Note**: It's worth noting that with this `Dockerfile`, we aren't building a new version of the MySQL software itself. We are using a powerful feature of the official MySQL image: any `.sql` file we `COPY` into the `/docker-entrypoint-initdb.d/` directory will be automatically executed the first time the database starts. This is the standard way to initialise a new database with tables and data.
+## Final Web Server Dockerfile
+
+To finish with the configuration, we need to update the `Dockerfile` of our web server by modifying `index.php` and adding `db_connect.php`:
+
+```bash
+FROM php:8.2-apache
+
+RUN apt-get update && \
+    useradd -m -s /bin/bash apache2 && \
+    a2dissite 000-default.conf && \
+    rm /etc/apache2/sites-available/* && \
+    rm /etc/apache2/ports.conf && \
+    docker-php-ext-install pdo pdo_mysql
+
+COPY xycxz.conf /etc/apache2/sites-available/
+COPY ports.conf /etc/apache2
+
+COPY index.php /var/www/html/
+COPY db_connect.php /var/www/html/
+
+RUN a2ensite xycxz.conf && \
+    chown -R apache2:apache2 /var/www/html
+
+EXPOSE 8080
+
+USER apache2
+```
 ## Conclusion
 
-This time I won't provide any kind of automation. The reason behind this is that this is the core part of the vulnerability I am trying to showcase, and I want you to fully understand it without any automated process. Don't forget to check my other posts where I set up the `FTP` and `Web Server` containers! They are required for you to fully understand my project.
+This time I won't provide any kind of automation. The reason behind this is that this is the core part of the vulnerability I am trying to showcase, and I want you to fully understand it without any automated process. Don't forget to check my other posts where I set up the [FTP](https://xycxz.github.io/ftp-docker/) and [Web Server](https://xycxz.github.io/apache2-docker/) containers! They are required for you to fully understand my project.
 ## Next Steps
 
 Now that we've created our custom Docker images using `Dockerfile`, the next step will be putting everything together but this time using `Docker Compose`, which will ease the configuration process of multiple containers, saving networking headaches, for example.
