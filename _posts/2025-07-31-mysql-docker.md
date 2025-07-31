@@ -2,10 +2,10 @@
 title: MySQL - Docker
 categories: [ "Docker", "MySQL", "PHP" ]
 image:
-  path: apache2_docker.png
+  path: mysql_docker.png
   alt: MySQL/Docker preview
 layout: post
-media_subpath: /assets/posts/2025-06-25-apache2-docker
+media_subpath: /assets/posts/2025-07-31-mysql-docker
 tags: [ "MySQL", "PHP", "Docker", "Linux", "DevOps", "Sysadmin", "Containers" ]
 ---
 
@@ -24,7 +24,7 @@ docker network create <NETWORK-NAME>
 
 **Note**: All this process will be simplified when we implement Docker Compose on this project. Nonetheless, understanding how networking works between containers is a crucial fundamental skill, which is why we are doing it manually first.
 
-![[Screenshot 2025-07-29 at 15.55.13.png]]
+![network_output.png](network_output.png)
 
 Now we can launch both containers and give them the names that we want. Because they will share the same custom network that enables DNS resolution, it will be easy for us to locate the correct containers by their names.
 ## Launching and Connecting the Services
@@ -41,38 +41,38 @@ docker run -it --network <NETWORK-NAME> --name <CUSTOM-NAME> -p 8009:80 -e PMA_H
 
 **Note**: We need to first launch the database before the GUI! I will be passing the password of the root account as an environmental variable in the command, but I would not recommend to do this. In a production environment, secrets like these would be managed by an orchestration tool like Docker Secrets or Kubernetes Secrets, not passed as plain text.
 
-![[Screenshot 2025-07-29 at 16.24.30.png]]
+![running_db_container.png](running_db_container.png)
 
 We can now navigate to our `phpMyAdmin` login portal and login with the root account with the provided password:
 
-![[Pasted image 20250729162636.png]]
+![phpMyAdmin_interface.png](phpMyAdmin_interface.png)
 ## Configuring and Connecting to the Database
 
 Before configuring our database, I will be creating an user responsible for managing the database only. For that, we can navigate to `User accounts -> Add user account`. The configuration will look as it follows:
 
-![[Screenshot 2025-07-29 at 16.37.28.png]]
+![creating_db_user.png](creating_db_user.png)
 
 This will create a new database that the created user will have full privileges on. We also need to make sure that `Host name` is set to `Any host`, since this allows the application container to connect from the Docker network. In production, it's safer to restrict access to specific IPs or use `localhost` where possible.
 
 Let's login with this user now and create the tables needed in the database. I will be creating a `users` table that will consist of two columns: one holding the username, and the other one its password. For that, we will select the corresponding database and create the table:
 
-![[Pasted image 20250729164729.png]]
+![creating_db_1.png](creating_db_1.png)
 
-![[Pasted image 20250730105227.png]]
+![creating_db_2.png](creating_db_2.png)
 
 Now that we defined the `schema` of our table, we just need to click on `Save`:
 
-![[Screenshot 2025-07-30 at 10.54.27.png]]
+![db_schema.png](db_schema.png)
 
 To start filling our table with data, we can click on the `Insert` button and pass the desired data:
 
-![[Screenshot 2025-07-30 at 10.57.48.png]]
+![db_data.png](db_data.png)
 
 **Note**: I am hardcoding the password of the user with a weak hashing algorithm (MD5) for demonstration purposes. Please, when working in a production environment NEVER do this. You should always use special programming functions to encrypt the passwords!
 
 Once we passed in the data, we can click on `Go`. I will be adding extra users to make this feel a bit more realistic:
 
-![[Pasted image 20250730110356.png]]
+![final_db.png](final_db.png)
 
 **Note**: You can configure the database to not allow duplicates by adding a column with the name of `id` and the type of `INT` (check the `A I` box as well to generate unique IDs). Make sure to also give this column an `index` and select the value of `PRIMARY`. Don't forget to empty your table before doing this, otherwise it will throw an error! Adding this will give us more control over the database.
 
@@ -165,9 +165,9 @@ With the database ready and connected to our web application, we just need to ma
 
 For that, first we need to export our database using the `phpMyAdmin` interface so then we can use it when the image gets built. To achieve this, select  our database, click on `Export`, and choose `SQL` format. Then we can click on `Export`:
 
-![[Pasted image 20250730202245.png]]
+![exporting_db.png](exporting_db.png)
 
-![[Screenshot 2025-07-30 at 20.25.06.png]]
+![sql_file.png](sql_file.png)
 
 We need to add the following lines to our exported file to make sure it works properly:
 
