@@ -5,7 +5,7 @@ image:
   path: docker_compose.png
   alt: Compose/Docker preview
 layout: post
-media_subpath: /assets/posts/2025-08-4-docker-compose
+media_subpath: /assets/posts/2025-08-04-docker-compose
 tags: [ "Docker", "DevOps", "Sysadmin", "Containers", "Proxy", "Load Balancer" ]
 ---
 
