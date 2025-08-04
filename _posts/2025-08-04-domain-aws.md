@@ -25,7 +25,7 @@ Because we are already using Amazon AWS, we will use `Amazon Route 53` to set up
 
 Once again, we will use the search feature to make use of this service. The images below illustrate the steps to reach the domain options we can choose:
 
-![route53_service_aws.png](route53_service.png)
+![route53_service_aws.png](route53_service_aws.png)
 
 ![route53_starting_aws.png](route53_starting_aws.png)
 
