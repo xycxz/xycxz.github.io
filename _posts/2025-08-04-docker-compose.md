@@ -331,7 +331,7 @@ We've seen quite a few new concepts we should explore and study to get a firm gr
 
 Before finishing, I want to show something to the reader. Now that the application is running correctly, check what happens when we sniff the network using `Wireshark`:
 
-![wireshark_output](wireshark_output)
+![wireshark_output.png](wireshark_output.png)
 
 As you can see, the credentials can be seen in plaintext. This is because we have not configured `HTTPS` yet. Nonetheless, I will leave this configuration for a future post, so stay tuned!
 ## Next Steps
