@@ -96,7 +96,7 @@ sudo docker run -it --rm <image> htpasswd -Bn <user>
 
 **Note**: Remember that the [custom image](https://xycxz.github.io/apache2-docker/) I am using is a modified version of the official Apache image (`httpd`). We can use the official image to run this command or just simply install the `apache2-utils` package.
 
-![httpasswd_command.png](httpasswd_command.png)
+![htpasswd_command.png](htpasswd_command.png)
 
 **Note**: I did not use a strong password on purpose, but you should!
 
