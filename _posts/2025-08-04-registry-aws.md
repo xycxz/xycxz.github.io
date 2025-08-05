@@ -1,5 +1,5 @@
 ---
-title: Registry AWS - AWS
+title: Registry - AWS
 categories: [ "AWS", "Registry", "Cloud", "Docker" ]
 image:
   path: registry_aws.png
