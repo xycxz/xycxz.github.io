@@ -1,12 +1,12 @@
 ---
 title: Domain - AWS
-categories: [ "AWS", "Domain", "Cloud" ]
+categories: [ "AWS", "Domain", "Cloud", "Route53" ]
 image:
   path: domain_aws.png
   alt: Domain/AWS preview
 layout: post
 media_subpath: /assets/posts/2025-08-04-domain-aws
-tags: [ "AWS", "DevOps", "Sysadmin", "Cloud", "Cloud Security", "Cloud Management", "Domain" ]
+tags: [ "AWS", "DevOps", "Sysadmin", "Cloud", "Cloud Security", "Cloud Management", "Domain", "Route53" ]
 ---
 
 ## Objective
