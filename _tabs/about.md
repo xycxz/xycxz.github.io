@@ -4,15 +4,17 @@ icon: fas fa-info-circle
 order: 7
 ---
 
-I'm an Electronic Engineering student with a strong interest in offensive security, vulnerability research, and understanding how systems work at their core. I enjoy exploring the intersection between hardware and cybersecurity—digging deep into how things operate, break, and can be made secure again.
+As an Electronic Engineering student and hands-on cybersecurity practitioner, I'm passionate about deconstructing complex systems to understand how they work, how they break, and how to make them secure. This curiosity isn't just theoretical; I apply it by building, analyzing, and securing cloud-native application stacks from the ground up.
 
-My passion lies in:
+My core focus areas are:
 
-Security research — uncovering vulnerabilities in systems and learning from the process.
+- Cloud & Application Security: I build and deploy multi-tier applications on AWS using Docker, architecting custom security controls with IAM and Security Groups. I then analyze these systems for common and complex vulnerabilities, related to web and Active Directory.
 
-Reverse engineering — understanding how software and hardware behave under the hood.
+- Automation & Infrastructure as Code (IaC): I have a deep interest in system internals, from analyzing network protocols with Wireshark to automating complex deployments with Docker Compose (for example). My goal is to build resilient, reproducible, and secure infrastructure.
 
-Whether it's studying signal behavior in circuits or testing the limits of a software system, I'm driven by curiosity and the desire to build (and break) things to learn how they really work.
+- Offensive Security Research: I continuously sharpen my practical skills by intentionally misconfiguring services to replicate and understand real-world attack chains and threat actor methodologies.
+
+I'm always looking for new challenges that merge my university background with my cybersecurity skills. I'm currently seeking opportunities in Cloud Security, System Administrator, and DevSecOps where I can contribute to building and defending robust systems.
 
 ## Certifications
 
