@@ -16,8 +16,8 @@ Whether it's studying signal behavior in circuits or testing the limits of a sof
 
 ## Certifications
 
-- Practical Network Penetration Tester (PNPT)
-- Certified Penetration Testing Specialist (CPTS)
-- Certified Bug Bounty Hunter (CBBH)
+- [Practical Network Penetration Tester (PNPT)](https://certified.tcm-sec.com/026b829e-d5cf-4ee0-8212-9b37633ab287#acc.qsDmuJrL)
+- Certified Penetration Testing Specialist (CPTS) - In Progress
+- [Certified Bug Bounty Hunter (CBBH)](https://www.credly.com/badges/9ef29a7d-703d-4619-a315-00a79927824a/public_url)
 
 

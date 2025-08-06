@@ -106,7 +106,7 @@ I'll start by explaining a core concept when it comes to FTP: `Passive` and `Act
 
 When interacting with FTP protocol, we (the client) always send a connection request to port 21, which always work. However, in Active mode what happens is that the client is the one telling the server to deliver files to him (the server will accept this and deliver the files from its port 20 to the client). The problem here is the client computer's internet router: it will block this file delivery because it will consider it as an unknown connection (incoming traffic) trying to get in (this would be a firewall). As a result, the client won't get the files.
 
-To solve this, Passive Mode was invented. Once again, the client will make the initial connection on port 21, but the server instead of trying to deliver the files to the client (using port 20), it will open a port (say, 49200) so the client can connect to it and get the files. Since firewalls usually don't have trouble with outgoing traffic, this would not suppose a problem to it (unless configured differently).
+To solve this, Passive Mode was invented. Once again, the client will make the initial connection on port 21, but the server instead of trying to deliver the files to the client (using port 20), it will open a port (say, 21100) so the client can connect to it and get the files. Since firewalls usually don't have trouble with outgoing traffic, this would not suppose a problem to it (unless configured differently).
 ## Exploring FTP Configuration Options
 
 One of the most used FTP servers on Linux-based distros is [vsFTPd](https://security.appspot.com/vsftpd.html). We can install this with the following command:
@@ -183,7 +183,7 @@ RUN chmod +x /usr/local/bin/passive.sh
 
 ENTRYPOINT ["/usr/local/bin/passive.sh"]
 
-EXPOSE 20 21 49200-49210
+EXPOSE 20 21 21100-21110
 
 CMD ["/usr/sbin/vsftpd", "/etc/vsftpd/vsftpd.conf"]
 ```
@@ -260,7 +260,7 @@ The previous lines just get our script ready to run once the blueprint of our im
 **Note**: Remember that every command we pass after `RUN` here will be used to create the image. This also applies when we define the `ENV` variables.
 
 ```bash
-EXPOSE 20 21 49200-49210
+EXPOSE 20 21 21100-21110
 
 CMD ["/usr/sbin/vsftpd", "/etc/vsftpd/vsftpd.conf"]
 ```
@@ -344,7 +344,7 @@ docker build --secret id=<ID GIVEN>,src=<FILE WITH OUT PASSWORD> -t <IMAGE TAG> 
 Now that our image is ready, we can run a container:
 
 ```bash
-docker run -d --name <NAME> -p 21:21 -p 20:20 -p 49200-49210:49200-49210 -v /home/xycxz/helpdesk:/home/xycxz -e PASV_ADDRESS=<VM IP> -e PASV_MIN_PORT=49200 -e PASV_MAX_PORT=49210 <IMAGE>
+docker run -d --name <NAME> -p 21:21 -p 20:20 -p 21100-21110:21100-21110 -v /home/xycxz/helpdesk:/home/xycxz -e PASV_ADDRESS=<VM IP> -e PASV_MIN_PORT=21100 -e PASV_MAX_PORT=21110 <IMAGE>
 ```
 
 I'll shortly explain what is this command doing:
