@@ -105,7 +105,7 @@ However, first we need to figure out if our DocumentDB is using `TLS` or not. We
 
 Since it is enabled, I will be following the steps shown in the post for this case. Because I'm using NodeJS for the backend, I need to choose the correct language and see what I have to add to my code to make this work properly:
 
-```node
+```JavaScript
 var MongoClient = require('mongodb').MongoClient
 
 //Create a MongoDB client, open a connection to DocDB; as a replica set,
@@ -160,7 +160,7 @@ ENTRYPOINT npm run start
 
 Now, I have to add the `tlsCAFile` option where we connect to the database to pick up the file Mongoose needs in order to `allow the SSL connection with AWS`.
 
-```node
+```JavaScript
 const db = mongoose.connect(mongoDbUri, {
 connectTimeoutMS: 1000,
 
@@ -175,7 +175,7 @@ Once we are done with this, we can upload our application to AppRunner. However,
 
 We also need to check for the `MONGODB_URI` environmental variable to connect AppRunner to the database. Let's check how my code looks like:
 
-```node
+```JavaScript
 const mongoDbUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/xycxz';
 ```
 
@@ -187,7 +187,7 @@ Let's break this down quickly:
 
 To successfully connect our database to AppRunner, we need to use this environmental variable with the following command:
 
-```node
+```JavaScript
 mongodb://xycxz:<insertYourPassword>@xycxz-documentdb.cluster-ci9kg6iiooa2.us-east-1.docdb.amazonaws.com:27017/xycxz?tls=true&tlsCAFile=global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
 ```
 
