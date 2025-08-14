@@ -72,7 +72,7 @@ To manage traffic, DocumentDB provides two special `endpoints` (which behave lik
 This architecture keeps the database fast, highly available, and resilient, `even under heavy traffic`.
 
 ![cluster_diagram.png](cluster_diagram.png)
-_Source_:https://docs.aws.amazon.com/documentdb/latest/developerguide/how-it-works.html
+_Source: https://docs.aws.amazon.com/documentdb/latest/developerguide/how-it-works.html_
 #### Jumping into the Configuration
 
 The configuration will look as follows:
