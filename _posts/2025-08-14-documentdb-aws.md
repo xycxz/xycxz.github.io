@@ -48,7 +48,7 @@ I won't be showing how to deploy the application on AppRunner because we have do
 
 `Amazon DocumentDB` is a fully managed database service and it is designed to be _compatible_ with MongoDB workloads. It is ideal for storing, querying, and indexing `JSON data`. To start using this service, we can click on `Create a DocumentDB cluster`:
 
-![[creating_cluster.png]]
+![creating_cluster.png](creating_cluster.png)
 
 Nonetheless, before getting into the configuration of the database, let's explore a bit more how is this system designed. I consider this to be very important because, even though this service is managed by Amazon, we should understand the `infrastructure` behind it in case we want to draw a good architecture of our system and take costs into account properly.
 #### Exploring Amazon's DocumentDB Core
@@ -71,37 +71,37 @@ To manage traffic, DocumentDB provides two special `endpoints` (which behave lik
 
 This architecture keeps the database fast, highly available, and resilient, `even under heavy traffic`.
 
-![[cluster_diagram.png]]
+![cluster_diagram.png](cluster_diagram.png)
 _Source_: https://docs.aws.amazon.com/documentdb/latest/developerguide/how-it-works.html
 #### Jumping into the Configuration
 
 The configuration will look as follows:
 
-![[cluster_conf1.png]]
+![cluster_conf1.png](cluster_conf1.png)
 
-![[cluster_conf2.png]]
+![cluster_conf2.png](cluster_conf2.png)
 
 **Note**: I will only use 1 replica in this case for demonstration purposes. In production environments we might need more!
 
-![[cluster_conf3.png]]
+![cluster_conf3.png](cluster_conf3.png)
 
 **Note**: I'll be using [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html), which help us "manage, retrieve, and rotate database credentials, application credentials, OAuth tokens, API keys, and other secrets throughout their lifecycles." This is crucial to enhance `security` in the cloud.
 
 Once we click on `Create Cluster`, we will see the following:
 
-![[created_cluster.png]]
+![created_cluster.png](created_cluster.png)
 
 **Note**: Pay attention to the `Role` tab. This is how we know what resource is defined.
 
 If we click on the `Primary intance`, we will notice that we can do some configuration there:
 
-![[primary_instance_conf.png]]
+![primary_instance_conf.png](primary_instance_conf.png)
 
 Here are the steps we need to follow to `claim` that the instance is actually ours. This will allow us to connect our database to this service securely and let AWS manage the rest. We can follow [this](https://docs.aws.amazon.com/documentdb/latest/developerguide/connect_programmatically.html) post to help us with this. 
 
 However, first we need to figure out if our DocumentDB is using `TLS` or not. We can check that by going to the cluster `configuration` tab:
 
-![[check_tls.png]]
+![check_tls.png](check_tls.png)
 
 Since it is enabled, I will be following the steps shown in the post for this case. Because I'm using NodeJS for the backend, I need to choose the correct language and see what I have to add to my code to make this work properly:
 
@@ -171,7 +171,7 @@ tlsCAFile: (process.env.NODE_ENV == 'production' ? 'global-bundle.pem': undefine
 
 Once we are done with this, we can upload our application to AppRunner. However, we need to check for `connectivity` before doing this, because when we create a cluster a [VPC](https://xycxz.github.io/networking-aws/) is always attached to it. Let's check this and then configure AppRunner to make sure both services can `communicate` to each other:
 
-![[check_vpc_sg.png]]
+![check_vpc_sg.png](check_vpc_sg.png)
 
 We also need to check for the `MONGODB_URI` environmental variable to connect AppRunner to the database. Let's check how my code looks like:
 
@@ -193,31 +193,31 @@ mongodb://xycxz:<insertYourPassword>@xycxz-documentdb.cluster-ci9kg6iiooa2.us-ea
 
 Because I used AWS Secrets Manager, I have to take a look to my credentials and then pass them to the environmental variable:
 
-![[user_secrets.png]]
+![user_secrets.png](user_secrets.png)
 
 Then, I can pass this to AppRunner:
 
-![[connecting_db_apprunner.png]]
+![connecting_db_apprunner.png](connecting_db_apprunner.png)
 
 Now AppRunner will know `where` to connect to, but we still need to put it into the correct `network`. For that, we will create a custom VPC that matches the VPC of our cluster:
 
-![[networking_apprunner.png]]
+![networking_apprunner.png](networking_apprunner.png)
 
 This should be enough to have everything up and working. Let's try building the application and see what we get:
 
-![[deployment_fail.png]]
+![deployment_fail.png](deployment_fail.png)
 
 As we can see, the application failed to upload several times. After inspecting the `application logs`, I was able to find the root cause of the issue:
 
-![[troubleshotting_logs.png]]
+![troubleshotting_logs.png](troubleshotting_logs.png)
 
 There is a parsing error because MongoDB is having problems trying to read the password of my user (it contains special characters). We can solve this quickly by `URL encoding` special characters and then passing in the password to the `MONGODB_URI` environmental variable once again:
 
-![[fixing_problem.png]]
+![fixing_problem.png](fixing_problem.png)
 
 The deployment of our backend is successful this time! We can navigate to the domain provided by AppRunner and see how everything works perfectly:
 
-![[deployed_application.png]]
+![deployed_application.png](deployed_application.png)
 ## Next Steps
 
 Now that we have finished deploying the backend of our application, we have to do the same but this time with the frontend side. In this case, the frontend does not contain any code that needs to get executed. Even though we could serve this using AppRunner, there are cheaper solutions to this. 
