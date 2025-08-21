@@ -75,7 +75,10 @@ After creating the service, we will notice that it needs a `user` to connect to 
 To create a user, we will click on `Add user`. We will set `User ID`, `Group ID`, and `Secondary group IDs` to 0 because we don't want to run into any issues with _Linux permissions_ (0 is the UID of the root user). When we click the 'info' link for the IAM role, it explains the requirements:
 
 ```
-You will need to supply an IAM role when setting up your user to access files stored in your EFS file systems. The role determines what resources (EFS file system) you want to allow your user to access and which operations they can (and cannot perform). We recommend that you use the role for EFS file system selection and mount access with read/write permissions.
+You will need to supply an IAM role when setting up your user to access files stored in your 
+EFS file systems. The role determines what resources (EFS file system) you want to allow your 
+user to access and which operations they can (and cannot perform). We recommend that you use 
+the role for EFS file system selection and mount access with read/write permissions.
 
 All roles used for the service must trust ‘transfer.amazonaws.com’.
 ```
